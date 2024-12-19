@@ -90,6 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c8f2e37ef387a469d178ed75c6016a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickClip: {fileID: 8300000, guid: 35065da997057a54c808798626b9bdc1, type: 3}
+  letClip: {fileID: 8300000, guid: e6057ab10a1fd0c4c8a31cf9ac5a9f56, type: 3}
 --- !u!225 &6326588537742628150
 CanvasGroup:
   m_ObjectHideFlags: 0

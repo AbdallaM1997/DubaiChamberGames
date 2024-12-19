@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,9 +26,11 @@ public class GameManager : MonoBehaviour
     private List<GameObject> spawnedLetters = new List<GameObject>();
     private List<GameObject> spawnedSlots = new List<GameObject>();
 
+    DataBaseManager dataBaseManager;
     private void Start()
     {
-        SetupGame();
+        //SetupGame();
+        dataBaseManager = GetComponent<DataBaseManager>();
     }
 
     private void Update()
@@ -82,12 +85,16 @@ public class GameManager : MonoBehaviour
             slot.SetCorrectLetter(c);
             spawnedSlots.Add(slotGO);
         }
-
+        StartCoroutine(WaitUniltAllLetterShows(letters));
         // Setup timer and start game
         timeRemaining = startTime;
         gameActive = true;
     }
-
+   IEnumerator WaitUniltAllLetterShows(char[] letters)
+    {
+        yield return new WaitUntil(()=> spawnedLetters.Count == letters.Length);
+        letterParent.GetComponent<GridLayoutGroup>().enabled = false;
+    }
     public void CheckSolution()
     {
         // Check all slots
@@ -117,6 +124,7 @@ public class GameManager : MonoBehaviour
     private void EndGame(bool success)
     {
         gameActive = false;
+        dataBaseManager.SendPostRequest();
         if (success)
         {
             messageText.SetActive(true);
