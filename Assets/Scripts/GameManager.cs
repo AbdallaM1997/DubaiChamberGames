@@ -20,13 +20,18 @@ public class GameManager : MonoBehaviour
     public string solutionWord = "RESPONSIBILITY";
     public float startTime = 30f;
 
+
+    private int score;
     private float timeRemaining;
     private bool gameActive;
 
     private List<GameObject> spawnedLetters = new List<GameObject>();
     private List<GameObject> spawnedSlots = new List<GameObject>();
 
-    DataBaseManager dataBaseManager;
+    private DataBaseManager dataBaseManager;
+
+    public int Score { get => score; set => score = value; }
+
     private void Start()
     {
         //SetupGame();
@@ -113,10 +118,19 @@ public class GameManager : MonoBehaviour
             TextMeshProUGUI letterText = placedLetter.GetComponentInChildren<TextMeshProUGUI>();
             assembled += letterText.text;
         }
-
+        char[] letters = solutionWord.ToCharArray();
+        char[] assembledletters = assembled.ToCharArray();
+        for (int i = 0; i < letters.Length; i++) 
+        { 
+            if (letters[i] == assembledletters[i])
+            {
+                score += 10;
+            }
+        }
         // Compare with the solution
         if (assembled == solutionWord)
         {
+
             EndGame(true);
         }
     }

@@ -5,6 +5,7 @@ public class LevelManager : MonoBehaviour
     [Header("Screens")]
     public GameObject startScreen;
     public GameObject gameplayScreen;
+    public GameObject instructionsScreen;
     public GameObject leaderboardScreen;
 
     private GameManager gameManager;
@@ -19,6 +20,7 @@ public class LevelManager : MonoBehaviour
     public void StartGame()
     {
         startScreen.SetActive(false);
+        instructionsScreen.SetActive(false);
         gameplayScreen.SetActive(true);
         gameManager.SetupGame();
     }

@@ -49,7 +49,7 @@ public class DataBaseManager : MonoBehaviour
     }
     IEnumerator SendPR()
     {
-        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + gameManager.timerText + "&setScore=1";
+        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + gameManager.Score.ToString() + "&setScore=1";
         print(post_url);
 
         // Post the URL to the site and create a download object to get the result.
@@ -88,8 +88,9 @@ public class DataBaseManager : MonoBehaviour
                     {
                         GameObject newGo = Instantiate(rowPrefab, rowsParent);
                         TextMeshProUGUI[] texts = newGo.GetComponentsInChildren<TextMeshProUGUI>();
-                        texts[0].text = item.name;
-                        texts[1].text = item.score;
+                        texts[0].text = item.id;
+                        texts[1].text = item.name;
+                        texts[3].text = item.score;
                     }
                     break;
 
