@@ -28,7 +28,7 @@ public class DataBaseManager : MonoBehaviour
     [Header("Leaderboard Data")]
     [SerializeField] private GameObject rowPrefab;
     [SerializeField] private Transform rowsParent;
-
+    private int rank = 1;
     GameManager gameManager;
     private RootList myRootList =  new RootList();
     private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=1&";
@@ -68,7 +68,9 @@ public class DataBaseManager : MonoBehaviour
 
     IEnumerator GetRequest()
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(DATABASE_URL+ "getLeaderboard=1"))
+        string mainLink = DATABASE_URL + "getLeaderboard=1";
+        print(mainLink);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(mainLink))
         {
             foreach (Transform item in rowsParent)
             {
@@ -88,9 +90,9 @@ public class DataBaseManager : MonoBehaviour
                     {
                         GameObject newGo = Instantiate(rowPrefab, rowsParent);
                         TextMeshProUGUI[] texts = newGo.GetComponentsInChildren<TextMeshProUGUI>();
-                        texts[0].text = item.id;
+                        texts[0].text = rank++.ToString();
                         texts[1].text = item.name;
-                        texts[3].text = item.score;
+                        texts[2].text = item.score;
                     }
                     break;
 
