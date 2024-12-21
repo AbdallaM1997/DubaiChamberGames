@@ -1,5 +1,7 @@
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine;
+using TMPro;
 
 public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -36,11 +38,18 @@ public class DraggableLetter : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         canvasGroup.blocksRaycasts = true;
         AudioSource.PlayClipAtPoint(letClip, new Vector3(0, 0, -10f));
+
         // If not dropped in a valid slot, return to original position
         if (transform.parent == originalParent || transform.parent == transform.root)
         {
-            transform.SetParent(originalParent);
-            rectTransform.anchoredPosition = originalPosition;
+            ReturnToOriginal();
         }
+    }
+
+    // Public method to return letter to its original position
+    public void ReturnToOriginal()
+    {
+        transform.SetParent(originalParent);
+        rectTransform.anchoredPosition = originalPosition;
     }
 }

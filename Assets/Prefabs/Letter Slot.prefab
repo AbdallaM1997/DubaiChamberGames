@@ -89,3 +89,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   correctLetter: 0
+  wrongClip: {fileID: 8300000, guid: 207bf249847754547974bd6512d7bff4, type: 3}
+  rightClip: {fileID: 8300000, guid: 3febc5766ccc4dc4b8ebc7f6d6b7cf10, type: 3}

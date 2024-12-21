@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour
     public Transform letterParent;     // Parent transform where scrambled letters appear
     public Transform slotsParent;      // Parent transform where slots appear
     public TextMeshProUGUI timerText;  // For displaying time left
-    public GameObject messageText;// For displaying success/failure messages
+    public GameObject messageText;     // For displaying success/failure messages
+    // If you have a score display, add:
+    // public TextMeshProUGUI scoreText;
 
     [Header("Prefabs")]
     public GameObject letterTilePrefab; // Prefab for letters
@@ -19,7 +21,6 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     public string solutionWord = "RESPONSIBILITY";
     public float startTime = 30f;
-
 
     private int score;
     private float timeRemaining;
@@ -30,12 +31,22 @@ public class GameManager : MonoBehaviour
 
     private DataBaseManager dataBaseManager;
 
-    public int Score { get => score; set => score = value; }
+    public int Score
+    {
+        get => score;
+        set
+        {
+            score = value;
+            // If you have a score text UI, update it here:
+            // scoreText.text = "Score: " + score;
+        }
+    }
 
     private void Start()
     {
-        //SetupGame();
         dataBaseManager = GetComponent<DataBaseManager>();
+        //SetupGame();
+        Score = 0; // Initialize score
     }
 
     private void Update()
@@ -50,7 +61,9 @@ public class GameManager : MonoBehaviour
                 EndGame(false);
             }
 
-            timerText.text = timeRemaining.ToString("00"+":"+"00");
+            // Formatting time as "00:00"
+            int seconds = Mathf.FloorToInt(timeRemaining);
+            timerText.text = seconds.ToString("00") + ":00";
         }
     }
 
@@ -90,47 +103,43 @@ public class GameManager : MonoBehaviour
             slot.SetCorrectLetter(c);
             spawnedSlots.Add(slotGO);
         }
+
+        // Wait until letters are spawned before disabling layout
         StartCoroutine(WaitUniltAllLetterShows(letters));
+
         // Setup timer and start game
         timeRemaining = startTime;
         gameActive = true;
     }
-   IEnumerator WaitUniltAllLetterShows(char[] letters)
+
+    IEnumerator WaitUniltAllLetterShows(char[] letters)
     {
-        yield return new WaitUntil(()=> spawnedLetters.Count == letters.Length);
+        yield return new WaitUntil(() => spawnedLetters.Count == letters.Length);
         letterParent.GetComponent<GridLayoutGroup>().enabled = false;
     }
+
+    // This method can still be used to check the final solution if needed
     public void CheckSolution()
     {
-        // Check all slots
+        // Check if all slots are filled
         string assembled = "";
         foreach (var slotObj in spawnedSlots)
         {
             DropSlot slot = slotObj.GetComponent<DropSlot>();
             if (slot.transform.childCount == 0)
             {
-                // Not all slots filled
+                // Not all slots filled, no final check
                 return;
             }
-
             // Get the letter placed
             Transform placedLetter = slot.transform.GetChild(0);
             TextMeshProUGUI letterText = placedLetter.GetComponentInChildren<TextMeshProUGUI>();
             assembled += letterText.text;
         }
-        char[] letters = solutionWord.ToCharArray();
-        char[] assembledletters = assembled.ToCharArray();
-        for (int i = 0; i < letters.Length; i++) 
-        { 
-            if (letters[i] == assembledletters[i])
-            {
-                score += 10;
-            }
-        }
-        // Compare with the solution
+
+        // If at the end they form the correct word, end the game
         if (assembled == solutionWord)
         {
-
             EndGame(true);
         }
     }
@@ -139,21 +148,15 @@ public class GameManager : MonoBehaviour
     {
         gameActive = false;
         dataBaseManager.SendPostRequest();
-        if (success)
-        {
-            messageText.SetActive(true);
-        }
-        else
-        {
-            messageText.SetActive(true);
-        }
+        // Show message text
+        messageText.SetActive(true);
+        // You can also show final score or success/fail message here
     }
 
     private void LateUpdate()
     {
         if (gameActive)
         {
-            // Continuously check if the solution is complete
             CheckSolution();
         }
     }
