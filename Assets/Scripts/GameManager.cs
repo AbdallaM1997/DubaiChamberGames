@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,8 +12,8 @@ public class GameManager : MonoBehaviour
     public Transform slotsParent;      // Parent transform where slots appear
     public TextMeshProUGUI timerText;  // For displaying time left
     public GameObject messageText;     // For displaying success/failure messages
-    // If you have a score display, add:
-    // public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI finalTimerText;  // For displaying time left
+    public TextMeshProUGUI finalScoreText;  // For displaying time left
 
     [Header("Prefabs")]
     public GameObject letterTilePrefab; // Prefab for letters
@@ -37,15 +38,12 @@ public class GameManager : MonoBehaviour
         set
         {
             score = value;
-            // If you have a score text UI, update it here:
-            // scoreText.text = "Score: " + score;
         }
     }
 
     private void Start()
     {
         dataBaseManager = GetComponent<DataBaseManager>();
-        //SetupGame();
         Score = 0; // Initialize score
     }
 
@@ -58,24 +56,23 @@ public class GameManager : MonoBehaviour
             {
                 timeRemaining = 0;
                 gameActive = false;
-                EndGame(false);
+                EndGame(true);
             }
 
-            // Formatting time as "00:00"
-            int seconds = Mathf.FloorToInt(timeRemaining);
-            timerText.text = seconds.ToString("00") + ":00";
+            float minutes = Mathf.FloorToInt(timeRemaining / 60);
+            float seconds = Mathf.FloorToInt(timeRemaining % 60);
+
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
 
     public void SetupGame()
     {
-        // Clear old letters/slots if any
         foreach (var l in spawnedLetters) Destroy(l);
         foreach (var s in spawnedSlots) Destroy(s);
         spawnedLetters.Clear();
         spawnedSlots.Clear();
 
-        // Scramble letters of the solution
         char[] letters = solutionWord.ToCharArray();
         System.Random rnd = new System.Random();
         for (int i = letters.Length - 1; i > 0; i--)
@@ -86,7 +83,6 @@ public class GameManager : MonoBehaviour
             letters[j] = temp;
         }
 
-        // Create letters
         foreach (var letter in letters)
         {
             GameObject letterGO = Instantiate(letterTilePrefab, letterParent);
@@ -95,7 +91,6 @@ public class GameManager : MonoBehaviour
             spawnedLetters.Add(letterGO);
         }
 
-        // Create slots equal to solution length
         foreach (var c in solutionWord)
         {
             GameObject slotGO = Instantiate(slotPrefab, slotsParent);
@@ -104,10 +99,8 @@ public class GameManager : MonoBehaviour
             spawnedSlots.Add(slotGO);
         }
 
-        // Wait until letters are spawned before disabling layout
         StartCoroutine(WaitUniltAllLetterShows(letters));
 
-        // Setup timer and start game
         timeRemaining = startTime;
         gameActive = true;
     }
@@ -118,26 +111,21 @@ public class GameManager : MonoBehaviour
         letterParent.GetComponent<GridLayoutGroup>().enabled = false;
     }
 
-    // This method can still be used to check the final solution if needed
     public void CheckSolution()
     {
-        // Check if all slots are filled
         string assembled = "";
         foreach (var slotObj in spawnedSlots)
         {
             DropSlot slot = slotObj.GetComponent<DropSlot>();
             if (slot.transform.childCount == 0)
             {
-                // Not all slots filled, no final check
                 return;
             }
-            // Get the letter placed
             Transform placedLetter = slot.transform.GetChild(0);
             TextMeshProUGUI letterText = placedLetter.GetComponentInChildren<TextMeshProUGUI>();
             assembled += letterText.text;
         }
 
-        // If at the end they form the correct word, end the game
         if (assembled == solutionWord)
         {
             EndGame(true);
@@ -147,10 +135,16 @@ public class GameManager : MonoBehaviour
     private void EndGame(bool success)
     {
         gameActive = false;
+
+        if (success)
+        {
+            float timeBonus = Mathf.FloorToInt(timeRemaining * 10); // Time bonus calculation
+            Score += Mathf.RoundToInt(timeBonus); // Add time bonus to score
+        }
         dataBaseManager.SendPostRequest();
-        // Show message text
+        finalTimerText.text = timerText.text;
+        finalScoreText.text = score.ToString();
         messageText.SetActive(true);
-        // You can also show final score or success/fail message here
     }
 
     private void LateUpdate()
@@ -159,5 +153,9 @@ public class GameManager : MonoBehaviour
         {
             CheckSolution();
         }
+    }
+    public void PlayAgine()
+    {
+        SceneManager.LoadScene("Game1");
     }
 }

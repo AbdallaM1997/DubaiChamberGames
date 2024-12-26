@@ -40,6 +40,7 @@ public class DropSlot : MonoBehaviour, IDropHandler
                     // Correct letter
                     droppedLetter.transform.SetParent(transform);
                     droppedLetter.transform.localPosition = Vector3.zero;
+                    droppedLetter.gameObject.GetComponent<RectTransform>().sizeDelta = this.GetComponent<RectTransform>().sizeDelta;
                     gm.Score += 10; // Add 10 points for correct letter
                     AudioSource.PlayClipAtPoint(rightClip, new Vector3(0, 0, -10f));
                 }
