@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1141680641482809486}
   - component: {fileID: 3013879766960885679}
   - component: {fileID: 6326588537742628150}
+  - component: {fileID: 3313248023623857536}
   m_Layer: 5
   m_Name: Letter Holder
   m_TagString: Untagged
@@ -85,7 +86,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3350104285576676923}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13c8f2e37ef387a469d178ed75c6016a, type: 3}
   m_Name: 
@@ -104,6 +105,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &3313248023623857536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3350104285576676923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c81513b764793f4458923019b0678af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  letterText: {fileID: 8878093314160078752}
 --- !u!1 &5072307860412591309
 GameObject:
   m_ObjectHideFlags: 0
