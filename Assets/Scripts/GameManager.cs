@@ -22,7 +22,9 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     public string solutionWord = "RESPONSIBILITY";
     public float startTime = 30f;          // Puzzle time limit
-
+    [Header("AudioClips")]
+    public AudioClip rightAnswer;
+    public AudioClip wrongAnswer;
     // Scoring
     public int correctLetterPoints = 10;
     public int wrongLetterPoints = -5;
@@ -147,6 +149,8 @@ public class GameManager : MonoBehaviour
         // Check correctness
         if (chosenChar == solutionWord[nextSlotIndex])
         {
+
+            AudioSource.PlayClipAtPoint(rightAnswer, new Vector3(0, 0, -10f));
             // Correct letter => LERP to slot
             Score += correctLetterPoints;
             // Start the coroutine that moves the letter to the correct slot
@@ -161,12 +165,21 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            StartCoroutine(WrongSginShow(letter.transform.GetChild(1).gameObject));
+            AudioSource.PlayClipAtPoint(wrongAnswer, new Vector3(0, 0, -10f));
             // Wrong letter => just subtract points
             Score += wrongLetterPoints;
             // Optionally, play a "wrong" sound or flash the letter
         }
     }
 
+    IEnumerator WrongSginShow(GameObject objectToShow)
+    {
+        objectToShow.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        objectToShow.SetActive(false);
+
+    }
     /// <summary>
     /// Moves the letter from its current position to the target slot using a LERP over 'duration' seconds.
     /// </summary>
@@ -226,8 +239,8 @@ public class GameManager : MonoBehaviour
         messageText.SetActive(true);
     }
 
-    public void PlayAgine()
+    public void PlayAgine(string scene)
     {
-        SceneManager.LoadScene("Game1");
+        SceneManager.LoadScene(scene);
     }
 }
