@@ -8,12 +8,14 @@ public class LevelManager : MonoBehaviour
     public GameObject instructionsScreen;
     public GameObject leaderboardScreen;
 
+    private CloudSpawner cloudSpawner;
     private GameManager gameManager;
     private DataBaseManager dataBaseManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         gameManager = GetComponent<GameManager>();
+        cloudSpawner = GetComponent<CloudSpawner>();    
         dataBaseManager = GetComponent<DataBaseManager>();
     }
     
@@ -22,7 +24,10 @@ public class LevelManager : MonoBehaviour
         startScreen.SetActive(false);
         instructionsScreen.SetActive(false);
         gameplayScreen.SetActive(true);
-        gameManager.SetupGame();
+        if (cloudSpawner != null)
+            cloudSpawner.Spwan();
+        if (gameManager != null)
+            gameManager.SetupGame();
     }
 
     public void OpenLeaderboard()

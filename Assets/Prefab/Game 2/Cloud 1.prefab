@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1196694287812440650
+--- !u!1 &1688603474153150621
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2265655465025915728}
-  - component: {fileID: 8360128071196968455}
-  - component: {fileID: 5646731854076930660}
+  - component: {fileID: 6627536040586454614}
+  - component: {fileID: 4917619081999690730}
+  - component: {fileID: 994972831112441597}
   m_Layer: 5
   m_Name: Sgin
   m_TagString: Untagged
@@ -18,14 +18,14 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!224 &2265655465025915728
+--- !u!224 &6627536040586454614
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196694287812440650}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 1688603474153150621}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -37,21 +37,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 52, y: 53}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8360128071196968455
+--- !u!222 &4917619081999690730
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196694287812440650}
+  m_GameObject: {fileID: 1688603474153150621}
   m_CullTransparentMesh: 1
---- !u!114 &5646731854076930660
+--- !u!114 &994972831112441597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196694287812440650}
+  m_GameObject: {fileID: 1688603474153150621}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Innovation
+  m_text: Responsibility
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cd9be90f36707644eb9b02e8f1f8c57a, type: 2}
   m_sharedMaterial: {fileID: 766463702746517920, guid: cd9be90f36707644eb9b02e8f1f8c57a, type: 2}
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 17
+  m_fontSize: 14.9
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 3934821468608454682}
   - component: {fileID: -7908261989798739226}
   m_Layer: 5
-  m_Name: Cloud
+  m_Name: Cloud 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -243,7 +243,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2118301298499287112}
-  - {fileID: 2265655465025915728}
+  - {fileID: 6627536040586454614}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0814b39aa53504eb2141321cfc5f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCorrectAnswer: 1
+  isCorrectAnswer: 0
   cloud: {fileID: 1735888211262164544}
   speed: 150
+  isMoveing: 1
