@@ -17,6 +17,7 @@ public class PlaneCollision : MonoBehaviour
     public GameObject finishPanel; // Finish panel to show when the game ends
     public AudioClip rightSfx;
     public AudioClip wrongSfx;
+    public Vector3 offSet = new Vector3(10, 0, 0);
     public int score = 0; // Player score
     public int lives = 3; // Number of lives
     public float gameDuration = 60f; // Game timer in seconds
@@ -30,41 +31,50 @@ public class PlaneCollision : MonoBehaviour
     private bool isCollide = false;
     private bool isDone = false;
     private float timeRemaining;
-
+    private bool isGameStarted = false;
     private void Start()
     {
         dataBaseManager = GetComponent<DataBaseManager>();
         cloudSpawner = GetComponent<CloudSpawner>();
+        //StartTimer();
+
+    }
+
+    public void StartTimer()
+    {
         // Initialize the timer
         timeRemaining = gameDuration;
-
+        isGameStarted = true;
     }
 
     private void Update()
     {
-        // Timer countdown
-        if (timeRemaining > 0)
+        if (isGameStarted)
         {
-            timeRemaining -= Time.deltaTime;
-            float minutes = Mathf.FloorToInt(timeRemaining / 60);
-            float seconds = Mathf.FloorToInt(timeRemaining % 60);
-            timerText.text = $"{minutes:00}:{seconds:00}";
-
-            // Detect collision with each cloud in the canvas
-            foreach (Transform child in canvas)
+            // Timer countdown
+            if (timeRemaining > 0)
             {
-                RectTransform cloudTransform = child.GetComponent<RectTransform>();
-                if (cloudTransform != null && RectOverlaps(plane, cloudTransform))
+                timeRemaining -= Time.deltaTime;
+                float minutes = Mathf.FloorToInt(timeRemaining / 60);
+                float seconds = Mathf.FloorToInt(timeRemaining % 60);
+                timerText.text = $"{minutes:00}:{seconds:00}";
+
+                // Detect collision with each cloud in the canvas
+                foreach (Transform child in canvas)
                 {
-                    if (!isCollide)
-                        OnTriggerCloud(cloudTransform);
+                    RectTransform cloudTransform = child.GetComponent<RectTransform>();
+                    if (cloudTransform != null && RectOverlaps(plane, cloudTransform ))
+                    {
+                        if (!isCollide)
+                            OnTriggerCloud(cloudTransform);
+                    }
                 }
             }
-        }
-        else if (timeRemaining <= 0)
-        {
-            if (!isDone)
-                EndGame();
+            else if (timeRemaining <= 0)
+            {
+                if (!isDone)
+                    EndGame();
+            }
         }
     }
 
@@ -141,18 +151,26 @@ public class PlaneCollision : MonoBehaviour
 
     private bool RectOverlaps(RectTransform a, RectTransform b)
     {
-        return RectTransformUtility.RectangleContainsScreenPoint(a, b.position, null);
+        return RectTransformUtility.RectangleContainsScreenPoint(a, b.position - offSet, null);
     }
 
     private void EndGame()
     {
         isDone = true;
+        isGameStarted = false;
         cloudSpawner.ClearClouds();
         finalScoreText.text = score.ToString();
-        float minutes = Mathf.FloorToInt(timeRemaining / 60);
-        float seconds = Mathf.FloorToInt(timeRemaining % 60);
-        finalTimeText.text = $"{minutes:00}:{seconds:00}";
+        if (timeRemaining <= 0)
+        {
 
+            finalTimeText.text = "00:00";
+        }
+        else
+        {
+            float minutes = Mathf.FloorToInt(timeRemaining / 60);
+            float seconds = Mathf.FloorToInt(timeRemaining % 60);
+            finalTimeText.text = $"{minutes:00}:{seconds:00}";
+        }
         // Stop the timer
         timeRemaining = 0;
         dataBaseManager.SendPostRequest();
