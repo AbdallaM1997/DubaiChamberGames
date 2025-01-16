@@ -12,6 +12,7 @@ public class LevelManager : MonoBehaviour
     private PlaneCollision planeCollision;
     private GameManager gameManager;
     private DataBaseManager dataBaseManager;
+    private WordManager wordManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,6 +20,7 @@ public class LevelManager : MonoBehaviour
         cloudSpawner = GetComponent<CloudSpawner>();
         planeCollision = GetComponent<PlaneCollision>();
         dataBaseManager = GetComponent<DataBaseManager>();
+        wordManager = GetComponent<WordManager>();  
     }
     
     public void StartGame()
@@ -32,6 +34,8 @@ public class LevelManager : MonoBehaviour
             cloudSpawner.Spwan();
         if (gameManager != null)
             gameManager.SetupGame();
+        if(wordManager != null)
+            wordManager.StartGame();
     }
 
     public void OpenLeaderboard()

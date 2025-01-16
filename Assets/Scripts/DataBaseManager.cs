@@ -32,14 +32,16 @@ public class DataBaseManager : MonoBehaviour
     private int rank = 1;
     GameManager gameManager;
     PlaneCollision planeCollision;
+    WordManager wordManager;
     private RootList myRootList =  new RootList();
-    private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=2&";
+    private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=3&";
 
 
     private void Awake()
     {
         gameManager = GetComponent<GameManager>();
         planeCollision = GetComponent<PlaneCollision>();
+        wordManager = GetComponent<WordManager>();
     }
     public void SendPostRequest()
     {
@@ -52,7 +54,7 @@ public class DataBaseManager : MonoBehaviour
     }
     IEnumerator SendPR()
     {
-        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + planeCollision.score.ToString() + "&setScore=1";
+        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + wordManager.score.ToString() + "&setScore=1";
         print(post_url);
 
         // Post the URL to the site and create a download object to get the result.
