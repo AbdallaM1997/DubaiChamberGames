@@ -15,6 +15,8 @@ public class WordManager : MonoBehaviour
     public Image[] heartImages;       // Array of heart images for lives
     public float timer = 15f;        // Countdown timer
     public GameObject gameOverPanel;
+    public AudioClip rightSFX;
+    public AudioClip wrongSFX;
 
     public int score = 0;            // Player's score
     private int lives = 3;            // Player's lives
@@ -74,6 +76,7 @@ public class WordManager : MonoBehaviour
 
     public void CorrectAnswer(Button clickedButton)
     {
+        AudioSource.PlayClipAtPoint(rightSFX, new Vector3(0, 0, -10f));
         ShowFeedback(clickedButton, true); // Show correct feedback
         score += 10; // Increase score
         UpdateUI();
@@ -83,6 +86,7 @@ public class WordManager : MonoBehaviour
 
     public void WrongAnswer(Button clickedButton)
     {
+        AudioSource.PlayClipAtPoint(wrongSFX, new Vector3(0, 0, -10f));
         ShowFeedback(clickedButton, false); // Show wrong feedback
         score -= 5; // Decrease score
         LoseLife();
