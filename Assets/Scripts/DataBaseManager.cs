@@ -54,7 +54,7 @@ public class DataBaseManager : MonoBehaviour
     }
     IEnumerator SendPR()
     {
-        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + wordManager.score.ToString() + "&setScore=1";
+        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + wordManager.timer.ToString() + "&setScore=1";
         print(post_url);
 
         // Post the URL to the site and create a download object to get the result.

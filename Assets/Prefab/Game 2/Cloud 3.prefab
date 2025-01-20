@@ -228,7 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCorrectAnswer: 0
   cloud: {fileID: 1735888211262164544}
-  speed: 150
+  speed: 200
   isMoveing: 1
 --- !u!1 &8143724725647724807
 GameObject:

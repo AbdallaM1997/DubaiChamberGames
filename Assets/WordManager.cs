@@ -81,18 +81,20 @@ public class WordManager : MonoBehaviour
         score += 10; // Increase score
         UpdateUI();
         DisableAllButtons();
-        StartCoroutine(LoadNextQuestionWithDelay());
+        GameOver();
+        //StartCoroutine(LoadNextQuestionWithDelay());
     }
 
     public void WrongAnswer(Button clickedButton)
     {
         AudioSource.PlayClipAtPoint(wrongSFX, new Vector3(0, 0, -10f));
         ShowFeedback(clickedButton, false); // Show wrong feedback
-        score -= 5; // Decrease score
+        score = 0; // Decrease score
         LoseLife();
         UpdateUI();
         DisableAllButtons();
-        StartCoroutine(LoadNextQuestionWithDelay());
+        GameOver();
+        //StartCoroutine(LoadNextQuestionWithDelay());
     }
 
     void LoseLife()

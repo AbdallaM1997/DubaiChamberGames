@@ -25,12 +25,12 @@ public class PlaneCollision : MonoBehaviour
     public TextMeshProUGUI answerText; // Timer display
     public TextMeshProUGUI finalScoreText; // Timer display
     public TextMeshProUGUI finalTimeText; // Timer display
+    public  float timeRemaining;
 
     private DataBaseManager dataBaseManager;
     private CloudSpawner cloudSpawner;
     private bool isCollide = false;
     private bool isDone = false;
-    private float timeRemaining;
     private bool isGameStarted = false;
     private void Start()
     {
@@ -85,7 +85,6 @@ public class PlaneCollision : MonoBehaviour
         isCollide = true;
         if (cloud != null)
         {
-
             cloud.isMoveing = false;
             if (cloud.isCorrectAnswer)
             {
@@ -97,6 +96,15 @@ public class PlaneCollision : MonoBehaviour
                 answerText.text = cloudTransform.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
                 answerText.color = new Color(63f / 255f, 168f / 255f, 42f / 255f, 1);
                 score++; // Increment score
+                lives--; // Decrement lives
+                UpdateLivesDisplay();
+                // Check if lives have run out
+                if (lives <= 0)
+                {
+                    if (!isDone)
+                        EndGame();
+                    return;
+                }
             }
             else
             {
