@@ -303,5 +303,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCorrectAnswer: 0
   cloud: {fileID: 1735888211262164544}
-  speed: 200
+  speed: 100
   isMoveing: 1

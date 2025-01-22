@@ -20,60 +20,56 @@ public class PlaneCollision : MonoBehaviour
     public Vector3 offSet = new Vector3(10, 0, 0);
     public int score = 0; // Player score
     public int lives = 3; // Number of lives
-    public float gameDuration = 60f; // Game timer in seconds
-    public TextMeshProUGUI timerText; // Timer display
-    public TextMeshProUGUI answerText; // Timer display
-    public TextMeshProUGUI finalScoreText; // Timer display
-    public TextMeshProUGUI finalTimeText; // Timer display
-    public  float timeRemaining;
+    public TextMeshProUGUI timerText; // Stopwatch display
+    public TextMeshProUGUI answerText;
+    public TextMeshProUGUI finalScoreText;
+    public TextMeshProUGUI finalTimeText;
+    public float elapsedTime = 0f; // Time elapsed for stopwatch
 
     private DataBaseManager dataBaseManager;
     private CloudSpawner cloudSpawner;
     private bool isCollide = false;
     private bool isDone = false;
     private bool isGameStarted = false;
+
     private void Start()
     {
         dataBaseManager = GetComponent<DataBaseManager>();
         cloudSpawner = GetComponent<CloudSpawner>();
-        //StartTimer();
-
+        // Call StartStopwatch() when game starts
     }
 
-    public void StartTimer()
+    public void StartStopwatch()
     {
-        // Initialize the timer
-        timeRemaining = gameDuration;
         isGameStarted = true;
+        elapsedTime = 0f;
     }
 
     private void Update()
     {
         if (isGameStarted)
         {
-            // Timer countdown
-            if (timeRemaining > 0)
-            {
-                timeRemaining -= Time.deltaTime;
-                float minutes = Mathf.FloorToInt(timeRemaining / 60);
-                float seconds = Mathf.FloorToInt(timeRemaining % 60);
-                timerText.text = $"{minutes:00}:{seconds:00}";
+            // Update the stopwatch
+            elapsedTime += Time.deltaTime;
+            float minutes = Mathf.FloorToInt(elapsedTime / 60);
+            float seconds = Mathf.FloorToInt(elapsedTime % 60);
+            timerText.text = $"{minutes:00}:{seconds:00}";
 
-                // Detect collision with each cloud in the canvas
-                foreach (Transform child in canvas)
+            // Detect collision with each cloud in the canvas
+            foreach (Transform child in canvas)
+            {
+                RectTransform cloudTransform = child.GetComponent<RectTransform>();
+                if (cloudTransform != null && RectOverlaps(plane, cloudTransform))
                 {
-                    RectTransform cloudTransform = child.GetComponent<RectTransform>();
-                    if (cloudTransform != null && RectOverlaps(plane, cloudTransform ))
-                    {
-                        if (!isCollide)
-                            OnTriggerCloud(cloudTransform);
-                    }
+                    if (!isCollide)
+                        OnTriggerCloud(cloudTransform);
                 }
             }
-            else if (timeRemaining <= 0)
+
+            // If lives reach zero, end the game
+            if (lives <= 0 && !isDone)
             {
-                if (!isDone)
-                    EndGame();
+                EndGame();
             }
         }
     }
@@ -98,13 +94,6 @@ public class PlaneCollision : MonoBehaviour
                 score++; // Increment score
                 lives--; // Decrement lives
                 UpdateLivesDisplay();
-                // Check if lives have run out
-                if (lives <= 0)
-                {
-                    if (!isDone)
-                        EndGame();
-                    return;
-                }
             }
             else
             {
@@ -117,14 +106,6 @@ public class PlaneCollision : MonoBehaviour
                 answerText.color = Color.red;
                 lives--; // Decrement lives
                 UpdateLivesDisplay();
-
-                // Check if lives have run out
-                if (lives <= 0)
-                {
-                    if (!isDone)
-                        EndGame();
-                    return;
-                }
             }
 
             StartCoroutine(DestroyCloudRoutine(cloudTransform));
@@ -134,9 +115,8 @@ public class PlaneCollision : MonoBehaviour
     private IEnumerator DestroyCloudRoutine(RectTransform cloudTransform)
     {
         yield return new WaitForSeconds(1f);
-        //cloudTransform.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        // Optionally destroy the cloud after collision
-        Destroy(cloudTransform.gameObject);
+        if (cloudTransform != null)
+            Destroy(cloudTransform.gameObject);
         answerText.color = Color.black;
         answerText.text = "---------";
         isCollide = false;
@@ -166,27 +146,21 @@ public class PlaneCollision : MonoBehaviour
     {
         isDone = true;
         isGameStarted = false;
+        cloudSpawner.StopSpawning();
         cloudSpawner.ClearClouds();
         finalScoreText.text = score.ToString();
-        if (timeRemaining <= 0)
-        {
 
-            finalTimeText.text = "00:00";
-        }
-        else
-        {
-            float minutes = Mathf.FloorToInt(timeRemaining / 60);
-            float seconds = Mathf.FloorToInt(timeRemaining % 60);
-            finalTimeText.text = $"{minutes:00}:{seconds:00}";
-        }
-        // Stop the timer
-        timeRemaining = 0;
+        float minutes = Mathf.FloorToInt(elapsedTime / 60);
+        float seconds = Mathf.FloorToInt(elapsedTime % 60);
+        finalTimeText.text = $"{minutes:00}:{seconds:00}";
+
         dataBaseManager.SendPostRequest();
 
         // Show the finish panel
         finishPanel.SetActive(true);
     }
-    public void PlayAgine(string scene)
+
+    public void PlayAgain(string scene)
     {
         SceneManager.LoadScene(scene);
     }
@@ -195,6 +169,7 @@ public class PlaneCollision : MonoBehaviour
     {
         AudioListener.pause = true;
     }
+
     public void PlayAudio()
     {
         AudioListener.pause = false;

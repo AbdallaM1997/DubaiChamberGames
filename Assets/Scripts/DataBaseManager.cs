@@ -14,7 +14,7 @@ public class DataBaseManager : MonoBehaviour
     {
         public string id;
         public string name;
-        public string score;
+        public float score;
     }
 
     public class RootList
@@ -54,7 +54,7 @@ public class DataBaseManager : MonoBehaviour
     }
     IEnumerator SendPR()
     {
-        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + wordManager.timer.ToString() + "&setScore=1";
+        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + wordManager.stopwatch.ToString() + "&setScore=1";
         print(post_url);
 
         // Post the URL to the site and create a download object to get the result.
@@ -97,7 +97,10 @@ public class DataBaseManager : MonoBehaviour
                         TextMeshProUGUI[] texts = newGo.GetComponentsInChildren<TextMeshProUGUI>();
                         texts[0].text = rank++.ToString();
                         texts[1].text = item.name;
-                        texts[2].text = item.score;
+                        float minutes = Mathf.FloorToInt(item.score / 60);
+                        float seconds = Mathf.FloorToInt(item.score % 60);
+                        texts[2].text = $"{minutes:00}:{seconds:00}";
+                        //texts[2].text = item.score;
                     }
                     break;
 

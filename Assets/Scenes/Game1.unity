@@ -342,7 +342,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.503334, y: -13.6785}
+  m_AnchoredPosition: {x: 0, y: -20}
   m_SizeDelta: {x: 94.4798, y: 50.9771}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &60840933
@@ -2041,7 +2041,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 179, y: 71}
+  m_SizeDelta: {x: 83, y: 71}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &575487856
 MonoBehaviour:
@@ -2676,11 +2676,11 @@ MonoBehaviour:
   letterTilePrefab: {fileID: 3350104285576676923, guid: 130872fc27197af49a9f3b072f5bcbf9, type: 3}
   slotPrefab: {fileID: 5836921274587539542, guid: 1091523e68eeb8b4688f38929788b4e4, type: 3}
   solutionWord: RESPONSIBILITY
-  startTime: 60
   rightAnswer: {fileID: 8300000, guid: 3febc5766ccc4dc4b8ebc7f6d6b7cf10, type: 3}
   wrongAnswer: {fileID: 8300000, guid: 207bf249847754547974bd6512d7bff4, type: 3}
   correctLetterPoints: 10
   wrongLetterPoints: -5
+  elapsedTime: 0
 --- !u!114 &788636809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2710,6 +2710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameInput: {fileID: 676032168}
+  gameNumber: 0
   rowPrefab: {fileID: 8466899187689198302, guid: f860ea9b9ad0f704c889bdc10a0c1fad, type: 3}
   rowsParent: {fileID: 421655048}
 --- !u!82 &788636811
@@ -4415,7 +4416,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1515088981
 RectTransform:
   m_ObjectHideFlags: 0

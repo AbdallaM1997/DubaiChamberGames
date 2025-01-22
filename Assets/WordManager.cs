@@ -9,28 +9,30 @@ public class WordManager : MonoBehaviour
 {
     public Button[] answerButtons;    // Buttons for the answers
     public TMP_Text scoreText;        // For the score display
-    public TMP_Text timerText;        // For the timer display
-    public TMP_Text finalTimerText;        // For the timer display
-    public TMP_Text finalScoreText;        // For the timer display
-    public Image[] heartImages;       // Array of heart images for lives
-    public float timer = 15f;        // Countdown timer
+    public TMP_Text timerText;        // For the stopwatch display
+    public TMP_Text finalTimerText;  // For the final stopwatch display
+    public TMP_Text finalScoreText;  // For the final score display
+    public Image[] heartImages;      // Array of heart images for lives
     public GameObject gameOverPanel;
     public AudioClip rightSFX;
     public AudioClip wrongSFX;
 
     public int score = 0;            // Player's score
-    private int lives = 3;            // Player's lives
+    private int lives = 3;           // Player's lives
     private bool isGameActive = false; // Game state
+    public float stopwatch = 0f;    // Stopwatch timer
     private DataBaseManager dataBaseManager;
+
     void Start()
     {
         dataBaseManager = GetComponent<DataBaseManager>();
-        //StartGame();
+        // StartGame();
     }
 
     public void StartGame()
     {
         isGameActive = true;
+        stopwatch = 0f; // Reset stopwatch
         LoadQuestion();
         UpdateUI();
     }
@@ -39,25 +41,15 @@ public class WordManager : MonoBehaviour
     {
         if (isGameActive)
         {
-            timer -= Time.deltaTime; // Decrease the timer
-            float minutes = Mathf.FloorToInt(timer / 60);
-            float seconds = Mathf.FloorToInt(timer % 60);
+            stopwatch += Time.deltaTime; // Increment the stopwatch
+            float minutes = Mathf.FloorToInt(stopwatch / 60);
+            float seconds = Mathf.FloorToInt(stopwatch % 60);
             timerText.text = $"{minutes:00}:{seconds:00}";
-
-            if (timer <= 0) // If timer runs out
-            {
-                //LoseLife();
-                //LoadQuestion();
-                GameOver();
-            }
         }
     }
 
     void LoadQuestion()
     {
-        //timer = 10f; // Reset timer
-
-
         // Randomize answer button positions
         RandomizeButtonPositions();
 
@@ -82,19 +74,17 @@ public class WordManager : MonoBehaviour
         UpdateUI();
         DisableAllButtons();
         GameOver();
-        //StartCoroutine(LoadNextQuestionWithDelay());
     }
 
     public void WrongAnswer(Button clickedButton)
     {
         AudioSource.PlayClipAtPoint(wrongSFX, new Vector3(0, 0, -10f));
         ShowFeedback(clickedButton, false); // Show wrong feedback
-        score = 0; // Decrease score
+        score = 0; // Reset score
         LoseLife();
         UpdateUI();
         DisableAllButtons();
         GameOver();
-        //StartCoroutine(LoadNextQuestionWithDelay());
     }
 
     void LoseLife()
@@ -116,18 +106,14 @@ public class WordManager : MonoBehaviour
         isGameActive = false;
         gameOverPanel.SetActive(true);
         finalScoreText.text = score.ToString();
-        if (timer <= 0)
-        {
-            timerText.text = "00:00";
-            finalTimerText.text = "00:00";
-        }
-        else
-        {
-            float minutes = Mathf.FloorToInt(timer / 60);
-            float seconds = Mathf.FloorToInt(timer   % 60);
-            finalTimerText.text = $"{minutes:00}:{seconds:00}";
-        }
+
+        // Display final stopwatch time
+        float minutes = Mathf.FloorToInt(stopwatch / 60);
+        float seconds = Mathf.FloorToInt(stopwatch % 60);
+        finalTimerText.text = $"{minutes:00}:{seconds:00}";
+
         dataBaseManager.SendPostRequest();
+
         foreach (Button btn in answerButtons)
         {
             btn.interactable = false; // Disable all buttons
@@ -185,6 +171,7 @@ public class WordManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f); // Wait for 1.5 seconds to show feedback
         LoadQuestion();
     }
+
     public void PlayAgine(string scene)
     {
         SceneManager.LoadScene(scene);

@@ -29,9 +29,9 @@ public class LevelManager : MonoBehaviour
         instructionsScreen.SetActive(false);
         gameplayScreen.SetActive(true);
         if (planeCollision != null)
-            planeCollision.StartTimer();
+            planeCollision.StartStopwatch();
         if (cloudSpawner != null)
-            cloudSpawner.Spwan();
+            cloudSpawner.StartSpawning();
         if (gameManager != null)
             gameManager.SetupGame();
         if(wordManager != null)

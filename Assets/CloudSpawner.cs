@@ -4,32 +4,42 @@ using UnityEngine;
 
 public class CloudSpawner : MonoBehaviour
 {
-    public List<GameObject> cloudPrefabs; // List of cloud prefabs
-    public RectTransform canvasTransform; // Reference to the Canvas for spawning
-    public float spawnInterval = 2f; // Time between spawns
+    public List<GameObject> cloudPrefabs;
+    public RectTransform canvasTransform;
+    public float spawnInterval = 2f;
     private bool isStartSpawning = false;
     private List<GameObject> clouds = new List<GameObject>();
 
     [System.Serializable]
     public class CloudData
     {
-        public int prefabIndex; // Index of the prefab in the cloudPrefabs list
-        public float yPosition; // Y position of the cloud
+        public int prefabIndex;
+        public float yPosition;
     }
 
-    public List<CloudData> predefinedClouds; // Predefined list of clouds with prefab indices and positions
-    private int currentCloudIndex = 0; // Index of the current cloud to spawn
+    public List<CloudData> predefinedClouds;
+    private int currentCloudIndex = 0;
 
     private void Start()
     {
-        // Call Spwan() when you want to start spawning
     }
 
-    public void Spwan()
+    public void StartSpawning()
     {
         isStartSpawning = true;
-        currentCloudIndex = 0; // Reset the index to start from the beginning
-        InvokeRepeating(nameof(SpawnCloud), 1f, spawnInterval);
+        currentCloudIndex = 0;
+
+        if (!IsInvoking(nameof(SpawnCloud)))
+        {
+            SpawnCloud();
+            InvokeRepeating(nameof(SpawnCloud), spawnInterval, spawnInterval);
+        }
+    }
+
+    public void StopSpawning()
+    {
+        isStartSpawning = false;
+        CancelInvoke(nameof(SpawnCloud));
     }
 
     private void SpawnCloud()
@@ -37,20 +47,36 @@ public class CloudSpawner : MonoBehaviour
         if (cloudPrefabs.Count == 0 || predefinedClouds.Count == 0)
         {
             Debug.LogWarning("No cloud prefabs or predefined clouds assigned to the spawner!");
-            CancelInvoke(nameof(SpawnCloud));
+            StopSpawning();
             return;
         }
 
-        if (!isStartSpawning || currentCloudIndex >= predefinedClouds.Count)
+        if (!isStartSpawning) return;
+
+        if (currentCloudIndex < predefinedClouds.Count)
         {
-            CancelInvoke(nameof(SpawnCloud)); // Stop spawning when all clouds are spawned
-            return;
+            SpawnCloudOnce();
         }
+        else if (AllCloudsOffScreen())
+        {
+            currentCloudIndex = 0;
+            clouds.Clear();
+        }
+    }
 
-        // Get the predefined cloud data
+    private bool AllCloudsOffScreen()
+    {
+        for (int i = clouds.Count - 1; i >= 0; i--)
+        {
+            if (clouds[i] != null) return false;
+        }
+        return true;
+    }
+
+    private void SpawnCloudOnce()
+    {
         CloudData cloudData = predefinedClouds[currentCloudIndex];
 
-        // Validate prefab index
         if (cloudData.prefabIndex < 0 || cloudData.prefabIndex >= cloudPrefabs.Count)
         {
             Debug.LogWarning($"Invalid prefab index {cloudData.prefabIndex} in predefined clouds!");
@@ -58,24 +84,24 @@ public class CloudSpawner : MonoBehaviour
             return;
         }
 
-        // Instantiate the cloud
         GameObject selectedCloud = cloudPrefabs[cloudData.prefabIndex];
         GameObject newCloud = Instantiate(selectedCloud, canvasTransform);
         clouds.Add(newCloud);
 
-        // Set the position of the cloud
         RectTransform cloudRect = newCloud.GetComponent<RectTransform>();
-        cloudRect.anchoredPosition = new Vector2(800f, cloudData.yPosition); // Adjust X position as needed
+        cloudRect.anchoredPosition = new Vector2(250f, cloudData.yPosition);
 
-        currentCloudIndex++; // Move to the next cloud
+        currentCloudIndex++;
     }
 
     public void ClearClouds()
     {
-        isStartSpawning = false;
-        for (int i = 0; i < clouds.Count; ++i)
+        for (int i = clouds.Count - 1; i >= 0; i--)
         {
-            Destroy(clouds[i]);
+            if (clouds[i] != null)
+            {
+                Destroy(clouds[i]);
+            }
         }
         clouds.Clear();
     }
