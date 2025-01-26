@@ -34,7 +34,7 @@ public class DataBaseManager : MonoBehaviour
     PlaneCollision planeCollision;
     WordManager wordManager;
     private RootList myRootList =  new RootList();
-    private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=3&";
+    private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=2&";
 
 
     private void Awake()
@@ -54,7 +54,7 @@ public class DataBaseManager : MonoBehaviour
     }
     IEnumerator SendPR()
     {
-        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + wordManager.stopwatch.ToString() + "&setScore=1";
+        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + planeCollision.elapsedTime.ToString() + "&setScore=1";
         print(post_url);
 
         // Post the URL to the site and create a download object to get the result.
