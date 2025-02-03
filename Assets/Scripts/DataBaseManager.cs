@@ -33,6 +33,7 @@ public class DataBaseManager : MonoBehaviour
     GameManager gameManager;
     PlaneCollision planeCollision;
     WordManager wordManager;
+    Stopwatch stopwatch;
     private RootList myRootList =  new RootList();
     private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=2&";
 
@@ -42,6 +43,7 @@ public class DataBaseManager : MonoBehaviour
         gameManager = GetComponent<GameManager>();
         planeCollision = GetComponent<PlaneCollision>();
         wordManager = GetComponent<WordManager>();
+        stopwatch = GetComponent<Stopwatch>();
     }
     public void SendPostRequest()
     {
