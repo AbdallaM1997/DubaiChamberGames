@@ -25,6 +25,7 @@ public class DataBaseManager : MonoBehaviour
 
     [Header("Input Fields Data ")]
     [SerializeField] private TMP_InputField nameInput;
+    [SerializeField] private TMP_InputField nameInputTwo;
     [SerializeField] private int gameNumber;
     [Header("Leaderboard Data")]
     [SerializeField] private GameObject rowPrefab;
@@ -56,7 +57,8 @@ public class DataBaseManager : MonoBehaviour
     }
     IEnumerator SendPR()
     {
-        string post_url = DATABASE_URL + "name=" + nameInput.text + "&score=" + planeCollision.elapsedTime.ToString() + "&setScore=1";
+        string newName = nameInput.text + " " +nameInputTwo.text;
+        string post_url = DATABASE_URL + "name=" + newName + "&score=" + planeCollision.elapsedTime.ToString() + "&setScore=1";
         print(post_url);
 
         // Post the URL to the site and create a download object to get the result.

@@ -31,7 +31,7 @@ public class PlaneCollision : MonoBehaviour
     private bool isCollide = false;
     private bool isDone = false;
     private bool isGameStarted = false;
-
+    private bool isAnswerRight = false;
     private void Start()
     {
         dataBaseManager = GetComponent<DataBaseManager>();
@@ -84,6 +84,7 @@ public class PlaneCollision : MonoBehaviour
             cloud.isMoveing = false;
             if (cloud.isCorrectAnswer)
             {
+                isAnswerRight = true;
                 Debug.Log("Correct answer!");
                 AudioSource.PlayClipAtPoint(rightSfx, new Vector3(0, 0, -10f));
                 cloudTransform.gameObject.transform.GetChild(1).gameObject.SetActive(true);
@@ -97,6 +98,7 @@ public class PlaneCollision : MonoBehaviour
             }
             else
             {
+                isAnswerRight = false;
                 Debug.Log("Wrong answer!");
                 AudioSource.PlayClipAtPoint(wrongSfx, new Vector3(0, 0, -10f));
                 cloudTransform.gameObject.transform.GetChild(1).gameObject.SetActive(true);
@@ -154,7 +156,8 @@ public class PlaneCollision : MonoBehaviour
         float seconds = Mathf.FloorToInt(elapsedTime % 60);
         finalTimeText.text = $"{minutes:00}:{seconds:00}";
 
-        dataBaseManager.SendPostRequest();
+        if (isAnswerRight)
+            dataBaseManager.SendPostRequest();
 
         // Show the finish panel
         finishPanel.SetActive(true);

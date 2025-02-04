@@ -1,12 +1,18 @@
 using UnityEngine;
+using TMPro;
 
 public class LevelManager : MonoBehaviour
 {
     [Header("Screens")]
     public GameObject startScreen;
+    public GameObject startScreenTwo;
     public GameObject gameplayScreen;
     public GameObject instructionsScreen;
     public GameObject leaderboardScreen;
+    public GameObject prompetText;
+
+    [SerializeField] private TMP_InputField nameInput;
+    [SerializeField] private TMP_InputField nameInputTwo;
 
     private CloudSpawner cloudSpawner;
     private PlaneCollision planeCollision;
@@ -44,6 +50,21 @@ public class LevelManager : MonoBehaviour
             wordSearchGrid.CreateGrid();
     }
 
+    public void CheckNames()
+    {
+        if (nameInput.text != "" && nameInputTwo.text != "")
+        {
+            startScreen.SetActive(false);
+            if (startScreenTwo != null)
+                startScreenTwo.SetActive(true);
+            else
+                instructionsScreen.SetActive(true);
+        }
+        else
+        {
+            prompetText.SetActive(true);
+        }
+    }
     public void OpenLeaderboard()
     {
         gameplayScreen.SetActive(false);

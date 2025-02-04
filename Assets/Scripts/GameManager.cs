@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
 
         if (chosenChar == solutionWord[nextSlotIndex])
         {
-            AudioSource.PlayClipAtPoint(rightAnswer, new Vector3(0, 0, -10f));
+            AudioSource.PlayClipAtPoint(rightAnswer, new Vector3(0, 0, -10f), 0.8f);
             Score += correctLetterPoints;
             StartCoroutine(LerpLetterToSlot(letter, nextSlotIndex, 0.5f));
             nextSlotIndex++;
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
         else
         {
             StartCoroutine(WrongSignShow(letter.transform.GetChild(1).gameObject));
-            AudioSource.PlayClipAtPoint(wrongAnswer, new Vector3(0, 0, -10f));
+            AudioSource.PlayClipAtPoint(wrongAnswer, new Vector3(0, 0, -10f), 0.8f);
             Score += wrongLetterPoints;
         }
     }
