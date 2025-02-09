@@ -20,6 +20,7 @@ public class WordManager : MonoBehaviour
     public int score = 0;            // Player's score
     private int lives = 3;           // Player's lives
     private bool isGameActive = false; // Game state
+    private bool isAnswerRight  = false;
     public float stopwatch = 0f;    // Stopwatch timer
     private DataBaseManager dataBaseManager;
 
@@ -71,6 +72,7 @@ public class WordManager : MonoBehaviour
         AudioSource.PlayClipAtPoint(rightSFX, new Vector3(0, 0, -10f));
         ShowFeedback(clickedButton, true); // Show correct feedback
         score += 10; // Increase score
+        isAnswerRight = true;
         UpdateUI();
         DisableAllButtons();
         GameOver();
@@ -81,6 +83,7 @@ public class WordManager : MonoBehaviour
         AudioSource.PlayClipAtPoint(wrongSFX, new Vector3(0, 0, -10f));
         ShowFeedback(clickedButton, false); // Show wrong feedback
         score = 0; // Reset score
+        isAnswerRight = false; 
         LoseLife();
         UpdateUI();
         DisableAllButtons();
@@ -112,7 +115,8 @@ public class WordManager : MonoBehaviour
         float seconds = Mathf.FloorToInt(stopwatch % 60);
         finalTimerText.text = $"{minutes:00}:{seconds:00}";
 
-        dataBaseManager.SendPostRequest();
+        if (isAnswerRight)
+            dataBaseManager.SendPostRequest();
 
         foreach (Button btn in answerButtons)
         {

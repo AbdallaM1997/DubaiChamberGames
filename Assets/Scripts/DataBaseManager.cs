@@ -36,7 +36,7 @@ public class DataBaseManager : MonoBehaviour
     WordManager wordManager;
     Stopwatch stopwatch;
     private RootList myRootList =  new RootList();
-    private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=2&";
+    private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=4&";
 
 
     private void Awake()
@@ -58,7 +58,7 @@ public class DataBaseManager : MonoBehaviour
     IEnumerator SendPR()
     {
         string newName = nameInput.text + " " +nameInputTwo.text;
-        string post_url = DATABASE_URL + "name=" + newName + "&score=" + planeCollision.elapsedTime.ToString() + "&setScore=1";
+        string post_url = DATABASE_URL + "name=" + newName + "&score=" + stopwatch.timeElapsed.ToString() + "&setScore=1";
         print(post_url);
 
         // Post the URL to the site and create a download object to get the result.
