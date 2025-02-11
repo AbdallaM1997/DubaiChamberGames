@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SocialPlatforms.Impl;
 
-
 public class DataBaseManager : MonoBehaviour
 {
     [System.Serializable]
@@ -36,7 +35,7 @@ public class DataBaseManager : MonoBehaviour
     WordManager wordManager;
     Stopwatch stopwatch;
     private RootList myRootList =  new RootList();
-    private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=4&";
+    private const string DATABASE_URL = "https://risebydubaichambers.com/service.php?game=2&";
 
 
     private void Awake()
@@ -58,7 +57,7 @@ public class DataBaseManager : MonoBehaviour
     IEnumerator SendPR()
     {
         string newName = nameInput.text + " " +nameInputTwo.text;
-        string post_url = DATABASE_URL + "name=" + newName + "&score=" + stopwatch.timeElapsed.ToString() + "&setScore=1";
+        string post_url = DATABASE_URL + "name=" + newName + "&score=" + planeCollision.elapsedTime.ToString() + "&setScore=1";
         print(post_url);
 
         // Post the URL to the site and create a download object to get the result.
@@ -103,7 +102,13 @@ public class DataBaseManager : MonoBehaviour
                         texts[1].text = item.name;
                         float minutes = Mathf.FloorToInt(item.score / 60);
                         float seconds = Mathf.FloorToInt(item.score % 60);
-                        texts[2].text = $"{minutes:00}:{seconds:00}";
+                        // Get the integer part
+                        int integerPart = Mathf.FloorToInt(item.score);
+
+                        // Get the fractional part 
+                        float fractionalPart = item.score - integerPart;
+                        double apsFractionalPart = Math.Round(fractionalPart, 2);
+                        texts[2].text = $"{minutes:00}:{seconds:00}" + apsFractionalPart;
                         //texts[2].text = item.score;
                     }
                     break;
